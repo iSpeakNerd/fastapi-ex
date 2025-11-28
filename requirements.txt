@@ -1,0 +1,22 @@
+requests
+# hf_xet
+# python-dotenv
+
+# types
+# typing-inspection
+# annotated-types
+pydantic
+pydantic-settings
+pydantic-core
+
+# fastapi
+uvicorn
+fastapi
+httpx
+# gunicorn
+
+# jwt
+# python-jose
+
+# formatter
+black
