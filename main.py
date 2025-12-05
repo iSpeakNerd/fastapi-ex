@@ -4,7 +4,7 @@ import sys
 from config import Settings
 from fastapi import FastAPI, Depends, HTTPException, status, Request, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse
 # https://fastapi.tiangolo.com/advanced/custom-response/
 from pydantic import BaseModel, HttpUrl
 from typing import Optional
@@ -40,7 +40,7 @@ def now():
 
 app = FastAPI(title="FastAPI example")
 
-@app.api_route("/", methods=["GET", "HEAD"])
+@app.api_route("/", methods=["GET"])
 async def root():
     logger.debug("--- received request for /---")
     return {
@@ -48,7 +48,7 @@ async def root():
         "timestamp": now(),
     }
 
-@app.api_route("/ping", methods=["GET", "HEAD", "OPTIONS"])
+@app.api_route("/ping", methods=["GET"])
 async def ping():
     start_time = datetime.now(timezone.utc)
     logger.debug("--- request received at /ping ---")
@@ -60,7 +60,7 @@ async def ping():
     }
 
 
-@app.api_route("/health", methods=["GET", "OPTIONS"])
+@app.api_route("/health", methods=["GET"])
 async def health_check():
     start_time = datetime.now(timezone.utc)
     logger.debug("--- request received at /health ---")
@@ -70,25 +70,21 @@ async def health_check():
         "response_time_ms": (datetime.now(timezone.utc) - start_time).total_seconds() * 1000,
     }
 
-#TODO: properly render HTML
-@app.api_route("/html", methods=["GET", "POST"])
+@app.api_route("/html", methods=["GET"], response_class=HTMLResponse)
 async def html_response():
-    html_to_send = html_wrapper("some data")
+    html_to_send = html_wrapper("this is wrapped <i>data</i>")
     return html_to_send
 
-#TODO: properly return HTML
-def html_wrapper(input:Optional[str]):
-    html = f"""<!DOCTYPE html>
+def html_wrapper(input: Optional[str]):
+    html = f"""
     <html>
-    <head>
-    <title>wrapped html response</title>
-    </head>
-
-    <body>
-    <h1>hello world!</h1>
-    <p>{input}</p>
-    </body>
-
+        <head>
+            <title>wrapped html response</title>
+        </head>
+        <body>
+            <h1>hello world!</h1>
+            <p>{input}</p>
+        </body>
     </html>"""
     return html
 
