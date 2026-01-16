@@ -1,6 +1,9 @@
+# venv
 .venv
-venv
 
-*.env*
+.env*
 setup_git.sh
 __pycache__
+
+# editor settings
+.vscode
