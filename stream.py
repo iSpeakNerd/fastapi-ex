@@ -1,4 +1,5 @@
 from random import random
+from typing import AsyncGenerator
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse, StreamingResponse
 from config import Settings
@@ -8,13 +9,13 @@ settings = Settings()
 app = FastAPI(title="stream ex")
 
 
-async def stream_generator():
+async def stream_generator() -> AsyncGenerator:
     array_ex = ["some", "strings", "are", "longer than others", "."]
     for i in array_ex:
         yield i
 
 
-async def slow_logic(gen):
+async def slow_logic(gen: AsyncGenerator) -> AsyncGenerator:
     from time import sleep
     import asyncio
 
